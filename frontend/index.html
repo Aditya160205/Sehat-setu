@@ -1,1 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sehat Setu - Unified Health Records & Consultation Hub</title>
+    <meta name="description" content="Digital health record management system providing AI-powered medical assistance, secure document storage, and telemedicine consultations for migrant workers and communities in Kerala.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>Sehat Setu</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="login.html" class="nav-link nav-button">Login</a>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Your Health Records,
+                    <span class="gradient-text">Unified & Secure</span>
+                </h1>
+                <p class="hero-description">
+                    Sehat Setu bridges healthcare gaps for migrant workers in Kerala with AI-powered medical assistance, 
+                    secure health record management, and telemedicine consultations aligned with sustainable development goals.
+                </p>
+                <div class="hero-buttons">
+                    <a href="login.html?type=patient" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i>
+                        Get Started as Patient
+                    </a>
+                    <a href="login.html?type=doctor" class="btn btn-outline">
+                        <i class="fas fa-user-md"></i>
+                        Join as Doctor
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Patients Served</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Verified Doctors</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Medical Records</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="floating-card medical-card">
+                    <i class="fas fa-stethoscope"></i>
+                    <span>AI Health Assistant</span>
+                </div>
+                <div class="floating-card record-card">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Digital Records</span>
+                </div>
+                <div class="floating-card secure-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Storage</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Comprehensive Healthcare Solutions</h2>
+                <p>Empowering migrant workers with accessible, secure, and intelligent health record management</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Health Assistant</h3>
+                    <p>Get instant medical guidance powered by advanced AI. Our intelligent chatbot provides preliminary health assessments and recommendations 24/7.</p>
+                    <ul class="feature-list">
+                        <li>Symptom analysis and guidance</li>
+                        <li>Medicine recommendations</li>
+                        <li>Emergency situation detection</li>
+                        <li>Multi-language support</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card featured">
+                    <div class="feature-badge">Most Popular</div>
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Secure Cloud Storage</h3>
+                    <p>Store all your medical documents safely in the cloud with military-grade encryption. Access them anywhere, anytime.</p>
+                    <ul class="feature-list">
+                        <li>Encrypted document storage</li>
+                        <li>Medical imaging support</li>
+                        <li>Automatic backup</li>
+                        <li>Easy sharing with doctors</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Telemedicine Consultations</h3>
+                    <p>Connect with verified doctors remotely. Get professional medical advice without geographical constraints.</p>
+                    <ul class="feature-list">
+                        <li>Video consultations</li>
+                        <li>Digital prescriptions</li>
+                        <li>Appointment scheduling</li>
+                        <li>Follow-up reminders</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Complete Medical History</h3>
+                    <p>Maintain a comprehensive record of your health journey. Never lose important medical information again.</p>
+                    <ul class="feature-list">
+                        <li>Past medical records</li>
+                        <li>Prescription history</li>
+                        <li>Vaccination records</li>
+                        <li>Lab results tracking</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>Multi-Language Support</h3>
+                    <p>Access healthcare services in your preferred language. Breaking down language barriers for better healthcare.</p>
+                    <ul class="feature-list">
+                        <li>Malayalam interface</li>
+                        <li>Hindi support</li>
+                        <li>English translations</li>
+                        <li>Voice assistance</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile-First Design</h3>
+                    <p>Optimized for mobile devices to ensure healthcare access for everyone, regardless of their device.</p>
+                    <ul class="feature-list">
+                        <li>Responsive design</li>
+                        <li>Offline capabilities</li>
+                        <li>Low bandwidth optimization</li>
+                        <li>Progressive Web App</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Bridging Healthcare Gaps for Migrant Workers</h2>
+                    <p class="lead">
+                        Sehat Setu addresses the critical healthcare challenges faced by migrant workers in Kerala, 
+                        providing a comprehensive digital health ecosystem that ensures continuity of care and prevents disease transmission.
+                    </p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-shield-virus"></i>
+                            <div>
+                                <h4>Disease Prevention</h4>
+                                <p>Early detection and prevention of infectious diseases through AI-powered screening and health monitoring.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <i class="fas fa-globe"></i>
+                            <div>
+                                <h4>SDG Alignment</h4>
+                                <p>Supporting UN Sustainable Development Goals for good health, well-being, and reduced inequalities.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h4>Community Health</h4>
+                                <p>Protecting public health by maintaining comprehensive health records and enabling rapid response to health threats.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <h3>98%</h3>
+                            <p>Data Accuracy</p>
+                        </div>
+                        <div class="about-stat">
+                            <h3>24/7</h3>
+                            <p>AI Support</p>
+                        </div>
+                        <div class="about-stat">
+                            <h3>256-bit</h3>
+                            <p>Encryption</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <div class="dashboard-preview">
+                        <div class="preview-header">
+                            <div class="preview-controls">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <span class="preview-title">Sehat Setu Dashboard</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-sidebar">
+                                <div class="sidebar-item active">Dashboard</div>
+                                <div class="sidebar-item">Health Chat</div>
+                                <div class="sidebar-item">Records</div>
+                                <div class="sidebar-item">Documents</div>
+                            </div>
+                            <div class="preview-main">
+                                <div class="preview-card">
+                                    <div class="card-header">Health Metrics</div>
+                                    <div class="metric-row">
+                                        <span>Blood Pressure</span>
+                                        <span>120/80</span>
+                                    </div>
+                                    <div class="metric-row">
+                                        <span>Heart Rate</span>
+                                        <span>72 bpm</span>
+                                    </div>
+                                </div>
+                                <div class="preview-card">
+                                    <div class="card-header">AI Assistant</div>
+                                    <div class="chat-bubble">
+                                        How can I help you today?
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get In Touch</h2>
+                <p>Have questions? We're here to help you get started with Sehat Setu</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>support@sehatsetu.com</p>
+                            <p>info@sehatsetu.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Call Us</h4>
+                            <p>+91 484 123 4567</p>
+                            <p>Emergency: 108</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Visit Us</h4>
+                            <p>Health Technology Hub</p>
+                            <p>Kochi, Kerala, India</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Support Hours</h4>
+                            <p>24/7 AI Assistant</p>
+                            <p>Human Support: 9 AM - 6 PM</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form-container">
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <select name="subject" required>
+                                <option value="">Select Subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="feedback">Feedback</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Sehat Setu</span>
+                    </div>
+                    <p>Unified Health Records & Consultation Hub for accessible healthcare in Kerala.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">AI Health Assistant</a></li>
+                        <li><a href="#">Telemedicine</a></li>
+                        <li><a href="#">Document Storage</a></li>
+                        <li><a href="#">Health Records</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-left">
+                    <p>&copy; 2024 Sehat Setu. All rights reserved.</p>
+                    <p>Developed for Government of Kerala - Health Service Department</p>
+                </div>
+                <div class="footer-bottom-right">
+                    <p>Supporting UN SDG 3: Good Health and Well-being</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/config.js"></script>
+</body>
+</html>

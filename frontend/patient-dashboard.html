@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - Sehat Setu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 2rem 0;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            padding: 0 2rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo-section h1 {
+            color: #2c5282;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-menu {
+            padding: 2rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin: 0.2rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(8px);
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 1rem;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-section h2 {
+            color: #2c3748;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section p {
+            color: #64748b;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3748;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3748;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid #667eea;
+            color: #667eea;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+            color: white;
+        }
+
+        .health-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            opacity: 0.9;
+        }
+
+        .chat-container {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .bot-avatar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .user-avatar {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .message-content {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 70%;
+        }
+
+        .user .message-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .file-list {
+            margin-top: 2rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .file-details h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: #2c3748;
+        }
+
+        .file-details p {
+            margin: 0.25rem 0 0;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2c3748;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left-color: #48bb78;
+        }
+
+        .notification.error {
+            border-left-color: #f56565;
+        }
+
+        .notification.info {
+            border-left-color: #4299e1;
+        }
+
+        .record-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .record-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3748;
+            margin: 0;
+        }
+
+        .record-date {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .record-content {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .record-meta {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <h1>Sehat Setu</h1>
+                <p>Patient Portal</p>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </div>
+                <div class="nav-item" data-section="health-chat">
+                    <i class="fas fa-comments"></i>
+                    AI Health Assistant
+                </div>
+                <div class="nav-item" data-section="medical-records">
+                    <i class="fas fa-file-medical"></i>
+                    Medical Records
+                </div>
+                <div class="nav-item" data-section="prescriptions">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    Prescriptions
+                </div>
+                <div class="nav-item" data-section="documents">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Documents
+                </div>
+                <div class="nav-item" data-section="appointments">
+                    <i class="fas fa-calendar-alt"></i>
+                    Appointments
+                </div>
+                <div class="nav-item" data-section="profile">
+                    <i class="fas fa-user-cog"></i>
+                    Profile
+                </div>
+            </nav>
+
+            <div style="position: absolute; bottom: 2rem; left: 2rem; right: 2rem;">
+                <button class="btn btn-outline" onclick="logout()" style="width: 100%;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="welcome-section">
+                    <h2 id="welcomeMessage">Welcome back!</h2>
+                    <p>Manage your health records and get AI-powered assistance</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">P</div>
+                    <div>
+                        <div style="font-weight: 600;" id="patientName">Patient</div>
+                        <div style="font-size: 0.9rem; color: #64748b;" id="patientId">ID: Loading...</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div>
+                                <div class="stat-value" id="consultationCount">12</div>
+                                <div class="stat-label">Total Consultations</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                            <div>
+                                <div class="stat-value" id="prescriptionCount">8</div>
+                                <div class="stat-label">Active Prescriptions</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div>
+                                <div class="stat-value" id="documentCount">15</div>
+                                <div class="stat-label">Medical Documents</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div>
+                                <div class="stat-value" id="nextAppointment">2 days</div>
+                                <div class="stat-label">Next Appointment</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Metrics -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Health Metrics</h3>
+                        <button class="btn btn-primary" onclick="showAddMetricModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Reading
+                        </button>
+                    </div>
+                    <div class="health-metrics" id="healthMetrics">
+                        <!-- Health metrics will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activities</h3>
+                    </div>
+                    <div id="recentActivities">
+                        <!-- Recent activities will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Health Chat Section -->
+            <section id="health-chat" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">AI Health Assistant</h3>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-outline" onclick="clearChat()">
+                                <i class="fas fa-trash"></i>
+                                Clear Chat
+                            </button>
+                            <button class="btn btn-primary" onclick="exportChatHistory()">
+                                <i class="fas fa-download"></i>
+                                Export Chat
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message">
+                                <div class="message-avatar bot-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message-content">
+                                    <p>Hello! I'm your AI health assistant. How can I help you today? Please describe
+                                        your symptoms or health concerns.</p>
+                                    <div class="message-time">Just now</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-container">
+                            <input type="text" class="chat-input" id="chatInput"
+                                placeholder="Describe your symptoms or health concerns...">
+                            <button class="btn btn-primary" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Medical Records Section -->
+            <section id="medical-records" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Medical History</h3>
+                        <button class="btn btn-primary" onclick="generateHealthReport()">
+                            <i class="fas fa-chart-line"></i>
+                            Generate Report
+                        </button>
+                    </div>
+
+                    <div id="medicalHistory">
+                        <!-- Medical history will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prescriptions Section -->
+            <section id="prescriptions" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Your Prescriptions</h3>
+                        <button class="btn btn-primary" onclick="requestPrescription()">
+                            <i class="fas fa-plus"></i>
+                            Request Prescription
+                        </button>
+                    </div>
+
+                    <div id="prescriptionsList">
+                        <!-- Prescriptions will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Documents Upload Section -->
+            <section id="documents" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Medical Documents</h3>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-outline" onclick="viewAllDocuments()">
+                                <i class="fas fa-folder"></i>
+                                View All
+                            </button>
+                            <button class="btn btn-primary" onclick="uploadBulkDocuments()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                Bulk Upload
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="file-upload-area" id="fileUploadArea"
+                        onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Drop files here or click to browse</h3>
+                        <p>Supported formats: PDF, JPG, PNG, DOCX (Max 10MB each)</p>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.docx"
+                            style="display: none;">
+                    </div>
+
+                    <div class="file-list" id="uploadedFiles">
+                        <!-- Uploaded files will appear here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appointments Section -->
+            <section id="appointments" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Your Appointments</h3>
+                        <button class="btn btn-primary" onclick="bookAppointment()">
+                            <i class="fas fa-plus"></i>
+                            Book Appointment
+                        </button>
+                    </div>
+
+                    <div id="appointmentsList">
+                        <!-- Appointments will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Profile Settings</h3>
+                        <button class="btn btn-primary" onclick="updateProfile()">
+                            <i class="fas fa-save"></i>
+                            Save Changes
+                        </button>
+                    </div>
+
+                    <form id="profileForm" class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" id="profileName" placeholder="Enter your full name">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" id="profileEmail" placeholder="Enter your email">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" id="profilePhone"
+                                placeholder="Enter your phone number">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" class="form-input" id="profileDOB">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select class="form-input" id="profileGender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Blood Group</label>
+                            <select class="form-input" id="profileBloodGroup">
+                                <option value="">Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label class="form-label">Emergency Contact</label>
+                            <input type="tel" class="form-input" id="emergencyContact"
+                                placeholder="Emergency contact number">
+                        </div>
+
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label class="form-label">Medical Conditions</label>
+                            <textarea class="form-input" id="medicalConditions" rows="3"
+                                placeholder="Any chronic conditions, allergies, or important medical information..."></textarea>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Dashboard functionality
+        class PatientDashboard {
+            constructor() {
+                this.currentUser = null;
+                this.chatHistory = [];
+                this.init();
+            }
+
+            async init() {
+                try {
+                    // Check authentication
+                    if (!this.checkAuth()) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+
+                    // Load user data
+                    await this.loadUserData();
+
+                    // Initialize UI
+                    this.initializeNavigation();
+                    this.initializeChat();
+                    this.initializeFileUpload();
+
+                    // Load dashboard data
+                    await this.loadDashboardData();
+
+                } catch (error) {
+                    console.error('Dashboard initialization error:', error);
+                    this.showNotification('Error loading dashboard', 'error');
+                }
+            }
+
+            checkAuth() {
+                const token = localStorage.getItem('userToken');
+                const userType = localStorage.getItem('userType');
+                return token && userType === 'patient';
+            }
+
+            async loadUserData() {
+                const userData = localStorage.getItem('userData');
+                const userName = localStorage.getItem('userName');
+                const userId = localStorage.getItem('userId');
+
+                if (userData) {
+                    this.currentUser = JSON.parse(userData);
+                }
+
+                // Update UI
+                document.getElementById('welcomeMessage').textContent = `Welcome back, ${userName || 'Patient'}!`;
+                document.getElementById('patientName').textContent = userName || 'Patient';
+                document.getElementById('patientId').textContent = `ID: ${userId || 'Loading...'}`;
+                document.getElementById('userAvatar').textContent = (userName || 'P').charAt(0).toUpperCase();
+
+                // Load profile form
+                if (this.currentUser) {
+                    this.loadProfileForm();
+                }
+            }
+
+            loadProfileForm() {
+                const user = this.currentUser;
+                document.getElementById('profileName').value = user.name || '';
+                document.getElementById('profileEmail').value = user.email || '';
+                document.getElementById('profilePhone').value = user.phone || '';
+                document.getElementById('profileDOB').value = user.dateOfBirth || '';
+                document.getElementById('profileGender').value = user.gender || '';
+                document.getElementById('profileBloodGroup').value = user.bloodGroup || '';
+                document.getElementById('emergencyContact').value = user.emergencyContact || '';
+                document.getElementById('medicalConditions').value = user.medicalConditions || '';
+            }
+
+            initializeNavigation() {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+
+                        item.classList.add('active');
+                        const sectionId = item.getAttribute('data-section');
+                        document.getElementById(sectionId).classList.add('active');
+
+                        this.loadSectionData(sectionId);
+                    });
+                });
+            }
+
+            initializeChat() {
+                const chatInput = document.getElementById('chatInput');
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
+                    }
+                });
+            }
+
+            initializeFileUpload() {
+                const fileUploadArea = document.getElementById('fileUploadArea');
+                const fileInput = document.getElementById('fileInput');
+
+                fileUploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    fileUploadArea.classList.add('dragover');
+                });
+
+                fileUploadArea.addEventListener('dragleave', () => {
+                    fileUploadArea.classList.remove('dragover');
+                });
+
+                fileUploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    fileUploadArea.classList.remove('dragover');
+                    this.handleFiles(e.dataTransfer.files);
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    this.handleFiles(e.target.files);
+                });
+            }
+
+            async loadSectionData(sectionId) {
+                try {
+                    switch (sectionId) {
+                        case 'dashboard':
+                            await this.loadDashboardData();
+                            break;
+                        case 'medical-records':
+                            await this.loadMedicalRecords();
+                            break;
+                        case 'prescriptions':
+                            await this.loadPrescriptions();
+                            break;
+                        case 'documents':
+                            await this.loadDocuments();
+                            break;
+                        case 'appointments':
+                            await this.loadAppointments();
+                            break;
+                        case 'health-chat':
+                            this.loadChatHistory();
+                            break;
+                    }
+                } catch (error) {
+                    console.error(`Error loading ${sectionId}:`, error);
+                }
+            }
+
+            async loadDashboardData() {
+                // Load health metrics
+                const healthMetrics = [
+                    { label: 'Weight', value: '70 kg', status: 'normal' },
+                    { label: 'Blood Pressure', value: '120/80', status: 'normal' },
+                    { label: 'Heart Rate', value: '72 bpm', status: 'normal' },
+                    { label: 'Temperature', value: '98.6°F', status: 'normal' },
+                    { label: 'Blood Sugar', value: '95 mg/dL', status: 'normal' },
+                    { label: 'BMI', value: '23.5', status: 'normal' }
+                ];
+
+                const container = document.getElementById('healthMetrics');
+                container.innerHTML = healthMetrics.map(metric => `
+                    <div class="metric-card">
+                        <div class="metric-value">${metric.value}</div>
+                        <div class="metric-label">${metric.label}</div>
+                    </div>
+                `).join('');
+
+                // Load recent activities
+                this.loadRecentActivities();
+            }
+
+            loadRecentActivities() {
+                const activities = [
+                    {
+                        type: 'consultation',
+                        title: 'Virtual Consultation Completed',
+                        description: 'Consultation with Dr. Smith about annual checkup',
+                        date: '2 days ago',
+                        icon: 'user-md'
+                    },
+                    {
+                        type: 'prescription',
+                        title: 'New Prescription Added',
+                        description: 'Paracetamol 500mg prescribed for fever',
+                        date: '5 days ago',
+                        icon: 'pills'
+                    },
+                    {
+                        type: 'document',
+                        title: 'Lab Report Uploaded',
+                        description: 'Blood test results from Central Lab',
+                        date: '1 week ago',
+                        icon: 'file-alt'
+                    }
+                ];
+
+                const container = document.getElementById('recentActivities');
+                container.innerHTML = activities.map(activity => `
+                    <div class="record-item">
+                        <div class="record-header">
+                            <h4 class="record-title">
+                                <i class="fas fa-${activity.icon}" style="margin-right: 0.5rem; color: #667eea;"></i>
+                                ${activity.title}
+                            </h4>
+                            <span class="record-date">${activity.date}</span>
+                        </div>
+                        <div class="record-content">${activity.description}</div>
+                    </div>
+                `).join('');
+            }
+
+            async sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+
+                if (!message) return;
+
+                // Add user message
+                this.addMessageToChat(message, 'user');
+                input.value = '';
+
+                // Show typing indicator
+                this.showTypingIndicator();
+
+                try {
+                    // In production, this would call your AI API
+                    const response = await this.getAIResponse(message);
+                    this.hideTypingIndicator();
+                    this.addMessageToChat(response, 'bot');
+
+                    // Save to chat history
+                    this.chatHistory.push({ message, response, timestamp: new Date() });
+                    localStorage.setItem('chatHistory', JSON.stringify(this.chatHistory));
+
+                } catch (error) {
+                    this.hideTypingIndicator();
+                    this.addMessageToChat('Sorry, I encountered an error. Please try again.', 'bot');
+                }
+            }
+
+            addMessageToChat(message, sender) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+
+                const avatar = sender === 'user' ?
+                    `<div class="message-avatar user-avatar">${this.currentUser?.name?.charAt(0) || 'U'}</div>` :
+                    `<div class="message-avatar bot-avatar"><i class="fas fa-robot"></i></div>`;
+
+                messageDiv.innerHTML = `
+                    ${avatar}
+                    <div class="message-content">
+                        <p>${message}</p>
+                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                    </div>
+                `;
+
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            showTypingIndicator() {
+                const chatMessages = document.getElementById('chatMessages');
+                const indicator = document.createElement('div');
+                indicator.className = 'message typing-indicator';
+                indicator.innerHTML = `
+                    <div class="message-avatar bot-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="message-content">
+                        <p>Typing...</p>
+                    </div>
+                `;
+                chatMessages.appendChild(indicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            hideTypingIndicator() {
+                const indicator = document.querySelector('.typing-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+
+            async getAIResponse(message) {
+                // Simulate AI response - in production, call your backend API
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                const lowerMessage = message.toLowerCase();
+
+                if (lowerMessage.includes('fever')) {
+                    return 'For fever management, rest and stay hydrated. Consider acetaminophen for comfort. If temperature exceeds 102°F or persists beyond 3 days, consult a healthcare provider immediately.';
+                } else if (lowerMessage.includes('headache')) {
+                    return 'For headache relief, try resting in a quiet, dark room and apply a cold or warm compress. Stay hydrated and consider over-the-counter pain relievers if needed.';
+                } else if (lowerMessage.includes('cough')) {
+                    return 'For cough management, stay hydrated with warm liquids, use honey or throat lozenges, and try steam inhalation. If persistent or severe, consult a doctor.';
+                } else {
+                    return 'I understand your concern. For personalized medical advice, I recommend consulting with a healthcare provider. Is there anything specific about your symptoms you\'d like to discuss?';
+                }
+            }
+
+            // ======================================================
+            //          FULL MASTER MEDICAL CHATBOT FUNCTION
+            //     All diseases included inside their categories
+            // ======================================================
+
+            // async getAIResponse(message) {
+            //     await new Promise(resolve => setTimeout(resolve, 1000));
+            //     const lowerMessage = message.toLowerCase();
+
+            //     // ======================================================
+            //     // 1. INFECTIOUS DISEASES
+            //     // (fever, cold, flu, covid, dengue, malaria, typhoid,
+            //     //  tuberculosis, pneumonia, chickenpox, measles, mumps,
+            //     //  hepatitis A/B/C, HIV/AIDS, food poisoning, gastroenteritis, UTI)
+            //     // ======================================================
+
+            //     // FEVER
+            //     if (lowerMessage.includes('fever')) {
+            //         return 'Fever: Paracetamol, Ibuprofen, ORS if dehydrated. Rest and hydrate.';
+
+            //         // COMMON COLD
+            //     } else if (lowerMessage.includes('common cold') || lowerMessage.includes('cold') || lowerMessage.includes('runny nose')) {
+            //         return 'Common cold: Cetirizine/Levocetirizine, Steam inhalation, Rest.';
+
+            //         // COUGH
+            //     } else if (lowerMessage.includes('cough')) {
+            //         return 'Cough: Guaifenesin (expectoration), Dextromethorphan (dry cough), Honey + warm fluids.';
+
+            //         // FLU / INFLUENZA
+            //     } else if (lowerMessage.includes('flu') || lowerMessage.includes('influenza')) {
+            //         return 'Flu: Paracetamol, Cough syrup, Warm fluids and rest. Antivirals need doctor prescription.';
+
+            //         // COVID-19
+            //     } else if (lowerMessage.includes('covid') || lowerMessage.includes('corona')) {
+            //         return 'COVID-19 (mild): Paracetamol, Vitamin C + Zinc, Steam inhalation. Seek medical help if breathing difficulty.';
+
+            //         // DENGUE
+            //     } else if (lowerMessage.includes('dengue')) {
+            //         return 'Dengue: Paracetamol, ORS, Electrolytes/coconut water. Avoid ibuprofen/aspirin. Seek hospital care for warning signs.';
+
+            //         // MALARIA
+            //     } else if (lowerMessage.includes('malaria')) {
+            //         return 'Malaria: Supportive - Paracetamol, ORS, Hydration. NOTE: Antimalarials require doctor prescription.';
+
+            //         // TYPHOID
+            //     } else if (lowerMessage.includes('typhoid')) {
+            //         return 'Typhoid: ORS, Paracetamol, Light diet. NOTE: Antibiotics require doctor prescription.';
+
+            //         // TUBERCULOSIS (TB)
+            //     } else if (lowerMessage.includes('tb') || lowerMessage.includes('tuberculosis')) {
+            //         return 'Tuberculosis: Good nutrition, multivitamin, rest. NOTE: TB medicines are prescription-only and supervised by doctors.';
+
+            //         // PNEUMONIA
+            //     } else if (lowerMessage.includes('pneumonia')) {
+            //         return 'Pneumonia: Paracetamol, Warm fluids, Steam inhalation. NOTE: Needs medical evaluation and prescription antibiotics/oxygen if required.';
+
+            //         // CHICKENPOX
+            //     } else if (lowerMessage.includes('chickenpox') || lowerMessage.includes('varicella')) {
+            //         return 'Chickenpox: Calamine lotion, Antihistamine (Cetirizine), Paracetamol for fever. Avoid scratching.';
+
+            //         // MEASLES
+            //     } else if (lowerMessage.includes('measles')) {
+            //         return 'Measles: Paracetamol, Vitamin A (if advised), Hydration and isolation. Seek medical care for complications.';
+
+            //         // MUMPS
+            //     } else if (lowerMessage.includes('mumps')) {
+            //         return 'Mumps: Paracetamol, Warm/cold compress for swelling, Soft food and rest.';
+
+            //         // HEPATITIS A / B / C
+            //     } else if (lowerMessage.includes('hepatitis a')) {
+            //         return 'Hepatitis A: Hydration, light diet, vitamins. No OTC cure - medical advice recommended.';
+            //     } else if (lowerMessage.includes('hepatitis b')) {
+            //         return 'Hepatitis B: Hydration, avoid alcohol, vitamin support. Specialist care and prescription treatment required.';
+            //     } else if (lowerMessage.includes('hepatitis c')) {
+            //         return 'Hepatitis C: Liver-friendly diet, hydration. Antivirals require specialist prescription.';
+
+            //         // HIV / AIDS
+            //     } else if (lowerMessage.includes('hiv') || lowerMessage.includes('aids')) {
+            //         return 'HIV/AIDS: Good nutrition, multivitamin, support. ART medicines require specialist prescription.';
+
+            //         // FOOD POISONING
+            //     } else if (lowerMessage.includes('food poisoning') || lowerMessage.includes('vomiting and diarrhea') || lowerMessage.includes('foodborne')) {
+            //         return 'Food poisoning: ORS, Zinc tablets, Rest and bland diet. Seek care if severe or bloody stools.';
+
+            //         // GASTROENTERITIS / STOMACH INFECTION
+            //     } else if (lowerMessage.includes('gastroenteritis') || lowerMessage.includes('stomach infection')) {
+            //         return 'Gastroenteritis: ORS, Probiotics, Zinc. Avoid anti-diarrheal meds if high fever or bloody diarrhea; see doctor.';
+
+            //         // UTI (Urinary Tract Infection)
+            //     } else if ((lowerMessage.includes('uti') || lowerMessage.includes('urinary tract infection')) || lowerMessage.includes('burning urine')) {
+            //         return 'UTI: Drink plenty of water, Cranberry juice, Urinary alkalizers. NOTE: Antibiotics need doctor prescription.';
+
+
+            //         // ======================================================
+            //         // 2. RESPIRATORY SYSTEM DISORDERS
+            //         // (asthma, bronchitis, copd, sinusitis, allergic rhinitis,
+            //         //  sore throat, tonsillitis, lung infection)
+            //         // ======================================================
+
+            //         // ASTHMA
+            //     } else if (lowerMessage.includes('asthma')) {
+            //         return 'Asthma: Steam inhalation, Avoid triggers (dust/smoke), Warm fluids. NOTE: Inhalers and rescue meds require prescription.';
+
+            //         // BRONCHITIS
+            //     } else if (lowerMessage.includes('bronchitis')) {
+            //         return 'Bronchitis: Expectorant (Guaifenesin), Steam inhalation, Hydration. Antibiotics/inhalers need doctor.';
+
+            //         // COPD
+            //     } else if (lowerMessage.includes('copd') || lowerMessage.includes('chronic obstructive')) {
+            //         return 'COPD: Avoid smoking, Steam/humidifier, Hydration. NOTE: COPD inhalers need medical supervision.';
+
+            //         // SINUSITIS
+            //     } else if (lowerMessage.includes('sinusitis') || lowerMessage.includes('sinus')) {
+            //         return 'Sinusitis: Steam inhalation, Saline nasal spray, Cetirizine. Seek doctor if severe.';
+
+            //         // ALLERGIC RHINITIS
+            //     } else if (lowerMessage.includes('allergic rhinitis') || lowerMessage.includes('hay fever') || lowerMessage.includes('allergy nose')) {
+            //         return 'Allergic rhinitis: Antihistamines (Cetirizine), Saline spray, Avoid allergens.';
+
+            //         // SORE THROAT
+            //     } else if (lowerMessage.includes('sore throat') || lowerMessage.includes('throat pain')) {
+            //         return 'Sore throat: Warm salt-water gargle, Lozenges, Paracetamol. See doctor if severe or persistent.';
+
+            //         // TONSILLITIS
+            //     } else if (lowerMessage.includes('tonsillitis') || lowerMessage.includes('tonsils')) {
+            //         return 'Tonsillitis: Warm salt gargles, Paracetamol, Lozenges. NOTE: Antibiotics require doctor evaluation.';
+
+            //         // LUNG INFECTION (generic)
+            //     } else if (lowerMessage.includes('lung infection') || lowerMessage.includes('pneumonitis') || lowerMessage.includes('lung inflammation')) {
+            //         return 'Lung infection: Paracetamol, Warm fluids, Steam. Medical diagnosis and prescription treatment often required.';
+
+
+            //         // ======================================================
+            //         // 3. DIGESTIVE SYSTEM DISORDERS
+            //         // (acidity/gerd, gastritis, peptic ulcer, stomach pain,
+            //         //  diarrhea, constipation, ibs, gallstones, appendicitis, fatty liver)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('acidity') || lowerMessage.includes('acid reflux') || lowerMessage.includes('gerd')) {
+            //         return 'Acidity/GERD: Antacids (Gelusil/Digene), Pantoprazole (PPI), Avoid spicy/oily food.';
+
+            //     } else if (lowerMessage.includes('gastritis')) {
+            //         return 'Gastritis: Antacids, Pantoprazole, Light bland diet. See doctor if severe.';
+
+            //     } else if (lowerMessage.includes('peptic ulcer') || (lowerMessage.includes('ulcer') && lowerMessage.includes('stomach'))) {
+            //         return 'Peptic ulcer: Antacids, Soft meals, Avoid NSAIDs. H. pylori treatment needs doctor prescription.';
+
+            //     } else if (lowerMessage.includes('stomach pain') || lowerMessage.includes('abdominal pain')) {
+            //         return 'Stomach pain: Dicyclomine (antispasmodic), Paracetamol, Warm water. Seek care if severe or persistent.';
+
+            //     } else if (lowerMessage.includes('diarrhea') || lowerMessage.includes('loose motion')) {
+            //         return 'Diarrhea: ORS, Probiotics, Zinc tablets. Hydration is important.';
+
+            //     } else if (lowerMessage.includes('constipation')) {
+            //         return 'Constipation: Isabgol (psyllium husk), Milk of Magnesia, High-fiber diet and water.';
+
+            //     } else if (lowerMessage.includes('ibs') || lowerMessage.includes('irritable bowel')) {
+            //         return 'IBS: Fiber and probiotics, Stress management, Avoid trigger foods. Prescription meds need doctor guidance.';
+
+            //     } else if (lowerMessage.includes('gallstone') || lowerMessage.includes('gall stones')) {
+            //         return 'Gallstones: Low-fat diet, Hydration, Paracetamol for pain. Larger stones may require medical/surgical care.';
+
+            //     } else if (lowerMessage.includes('appendicitis') || lowerMessage.includes('appendix pain')) {
+            //         return 'Appendicitis: EMERGENCY — severe pain and fever. Go to hospital immediately; do NOT self-medicate.';
+
+            //     } else if (lowerMessage.includes('fatty liver') || lowerMessage.includes('steatosis')) {
+            //         return 'Fatty liver: Avoid alcohol, Low-fat diet, Weight management. Medical follow-up needed for treatment.';
+
+
+            //         // ======================================================
+            //         // 4. HEART & BLOOD VESSEL (CARDIOVASCULAR) DISEASES
+            //         // (hypertension, hypotension, high cholesterol, heart attack,
+            //         //  stroke, arrhythmia)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('high bp') || lowerMessage.includes('high blood pressure') || lowerMessage.includes('hypertension')) {
+            //         return 'Hypertension: Low-salt diet, Regular exercise, Deep breathing. BP medicines require doctor prescription.';
+
+            //     } else if (lowerMessage.includes('low bp') || lowerMessage.includes('low blood pressure') || lowerMessage.includes('hypotension')) {
+            //         return 'Hypotension: Hydration, ORS, Increase salt intake if advised. Seek care if fainting or dizziness occurs.';
+
+            //     } else if (lowerMessage.includes('cholesterol') || lowerMessage.includes('high cholesterol') || lowerMessage.includes('lipid')) {
+            //         return 'High cholesterol: Low-fat diet, Exercise, Avoid fried foods. Statins or other meds need prescription.';
+
+            //     } else if (lowerMessage.includes('heart attack') || lowerMessage.includes('chest pain') || lowerMessage.includes('angina')) {
+            //         return 'Heart attack: EMERGENCY — chest pain with sweating/shortness of breath needs immediate hospital care. Call emergency services.';
+
+            //     } else if (lowerMessage.includes('stroke') || lowerMessage.includes('slurred speech') || lowerMessage.includes('numbness on one side')) {
+            //         return 'Stroke: EMERGENCY — sudden weakness/numbness or slurred speech. Go to hospital immediately.';
+
+            //     } else if (lowerMessage.includes('arrhythmia') || lowerMessage.includes('palpitation') || lowerMessage.includes('irregular heartbeat')) {
+            //         return 'Arrhythmia: Avoid caffeine, Hydration, Seek cardiologist if palpitations persist. Prescription meds require doctor.';
+
+
+            //         // ======================================================
+            //         // 5. ENDOCRINE & HORMONAL DISORDERS
+            //         // (diabetes, hypoglycemia, hypothyroid, hyperthyroid, pcos, adrenal)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('diabetes') || lowerMessage.includes('high sugar') || lowerMessage.includes('blood sugar')) {
+            //         return 'Diabetes: Diet control, Regular walking, Hydration. Diabetes medicines (insulin/oral agents) need doctor supervision.';
+
+            //     } else if (lowerMessage.includes('low sugar') || lowerMessage.includes('hypoglycemia') || lowerMessage.includes('low blood sugar')) {
+            //         return 'Hypoglycemia: Take glucose tablets, fruit juice or sugar water immediately. Seek urgent care if unconscious.';
+
+            //     } else if (lowerMessage.includes('hypothyroid') || lowerMessage.includes('low thyroid')) {
+            //         return 'Hypothyroidism: Iodine-rich foods, Regular follow-up. Thyroxine replacement requires prescription.';
+
+            //     } else if (lowerMessage.includes('hyperthyroid') || lowerMessage.includes('overactive thyroid')) {
+            //         return 'Hyperthyroidism: Avoid caffeine, Manage stress. Anti-thyroid meds need specialist prescription.';
+
+            //     } else if (lowerMessage.includes('pcos') || lowerMessage.includes('polycystic')) {
+            //         return 'PCOS: Exercise, Balanced diet, Weight management. Hormonal treatments require doctor guidance.';
+
+            //     } else if (lowerMessage.includes('adrenal') || lowerMessage.includes('cortisol') || lowerMessage.includes('adrenal problem')) {
+            //         return 'Adrenal problems: Stress reduction, Adequate sleep, Hydration. Hormone therapy requires specialist care.';
+
+
+            //         // ======================================================
+            //         // 6. BRAIN & NERVOUS SYSTEM
+            //         // (headache, migraine, epilepsy, parkinson, alzheimer, nerve pain, stroke)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('headache') && !lowerMessage.includes('migraine')) {
+            //         return 'Headache: Paracetamol, Ibuprofen, Cold compress and rest in quiet room.';
+
+            //     } else if (lowerMessage.includes('migraine')) {
+            //         return 'Migraine: Paracetamol, Caffeine-based relief, Rest in dark room. Strong migraine meds need doctor.';
+
+            //     } else if (lowerMessage.includes('epilepsy') || lowerMessage.includes('seizure') || lowerMessage.includes('fits')) {
+            //         return 'Seizure: Keep patient safe, place on side, do NOT put anything in mouth. Anti-seizure meds are prescription-only.';
+
+            //     } else if (lowerMessage.includes('parkinson') || lowerMessage.includes('parkinson\'s')) {
+            //         return 'Parkinson\'s disease: Light exercise, Physiotherapy, Nutrition. Parkinson medicines require neurologist.';
+
+            //     } else if (lowerMessage.includes('alzheimer') || lowerMessage.includes('dementia') || lowerMessage.includes('memory loss')) {
+            //         return 'Alzheimer/dementia: Mental stimulation, Supportive care, Nutrition. Prescription meds require specialist.';
+
+            //     } else if (lowerMessage.includes('nerve pain') || lowerMessage.includes('neuropathic')) {
+            //         return 'Nerve pain: Warm compress, Gentle massage, Vitamin B12-rich foods. Neuropathic drugs need doctor.';
+
+
+            //         // ======================================================
+            //         // 7. MUSCULOSKELETAL DISORDERS
+            //         // (back pain, neck pain, joint pain, arthritis, osteoporosis, muscle cramps)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('back pain') || lowerMessage.includes('lower back')) {
+            //         return 'Back pain: Paracetamol, Ibuprofen, Hot water bag and avoid heavy lifting.';
+
+            //     } else if (lowerMessage.includes('neck pain') || lowerMessage.includes('neck strain')) {
+            //         return 'Neck pain: Paracetamol, Warm compress, Gentle stretching.';
+
+            //     } else if (lowerMessage.includes('joint pain') || lowerMessage.includes('arthralgia')) {
+            //         return 'Joint pain: Diclofenac gel (topical), Ibuprofen, Warm compress.';
+
+            //     } else if (lowerMessage.includes('arthritis') || lowerMessage.includes('joint inflammation')) {
+            //         return 'Arthritis: Warm compress, Gentle exercise, Paracetamol. Disease-modifying drugs need doctor.';
+
+            //     } else if (lowerMessage.includes('osteoporosis') || lowerMessage.includes('weak bones')) {
+            //         return 'Osteoporosis: Calcium-rich diet, Vitamin D, Weight-bearing exercise. Prescription meds require doctor.';
+
+            //     } else if (lowerMessage.includes('muscle cramp') || lowerMessage.includes('cramp')) {
+            //         return 'Muscle cramps: ORS (electrolytes), Gentle stretching and warm massage. Hydration helps.';
+
+
+            //         // ======================================================
+            //         // 8. SKIN DISEASES
+            //         // (allergy/rash, eczema, psoriasis, acne, fungal infection, scabies, sunburn)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('skin allergy') || lowerMessage.includes('rash') || lowerMessage.includes('itching')) {
+            //         return 'Skin allergy/rash: Cetirizine, Calamine lotion, Aloe vera. See doctor if spreading or breathing difficulty.';
+
+            //     } else if (lowerMessage.includes('eczema') || lowerMessage.includes('dermatitis')) {
+            //         return 'Eczema: Moisturizer, Coconut oil, Calamine. Steroid creams require doctor.';
+
+            //     } else if (lowerMessage.includes('psoriasis')) {
+            //         return 'Psoriasis: Emollients, Aloe vera, Mild sunlight. Prescription immuno/steroid therapy requires doctor.';
+
+            //     } else if (lowerMessage.includes('acne') || lowerMessage.includes('pimple') || lowerMessage.includes('spot')) {
+            //         return 'Acne: Benzoyl peroxide gel, Salicylic acid wash, Tea tree oil (mild). Avoid squeezing.';
+
+            //     } else if (lowerMessage.includes('fungal') || lowerMessage.includes('ringworm') || lowerMessage.includes('tinea')) {
+            //         return 'Fungal infection: Clotrimazole or Ketoconazole cream, Antifungal powders. Do NOT use steroid creams on fungal infections.';
+
+            //     } else if (lowerMessage.includes('scabies') || lowerMessage.includes('mites')) {
+            //         return 'Scabies: Calamine for relief, Antihistamines for itching. Specific scabies creams require doctor guidance.';
+
+            //     } else if (lowerMessage.includes('sunburn') || lowerMessage.includes('sun burn')) {
+            //         return 'Sunburn: Aloe vera gel, Cold compress, Moisturizer and avoid further sun exposure.';
+
+
+            //         // ======================================================
+            //         // 9. EYE DISORDERS
+            //         // (conjunctivitis, dry eye, stye, eye allergy, eye infection, blurred vision, eye strain)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('conjunctivitis') || lowerMessage.includes('pink eye') || lowerMessage.includes('red eye')) {
+            //         return 'Conjunctivitis: Lubricating eye drops (artificial tears), Cold compress, Clean eye gently. Antibiotic drops need doctor.';
+
+            //     } else if (lowerMessage.includes('dry eye') || lowerMessage.includes('dryness in eye')) {
+            //         return 'Dry eye: Artificial tears, Warm compress, Frequent blinking and reduce screen time.';
+
+            //     } else if (lowerMessage.includes('stye') || lowerMessage.includes('eye pimple')) {
+            //         return 'Stye: Warm compress, Lubricating drops, Gentle eyelid hygiene. Do NOT squeeze.';
+
+            //     } else if (lowerMessage.includes('eye allergy') || lowerMessage.includes('itchy eyes')) {
+            //         return 'Eye allergy: Antihistamines (oral), Lubricating drops, Cold compress. Avoid rubbing eyes.';
+
+            //     } else if (lowerMessage.includes('eye infection')) {
+            //         return 'Eye infection: Clean water wash, Lubricating drops, Cold compress. Antibiotic drops need doctor.';
+
+            //     } else if (lowerMessage.includes('blur') || lowerMessage.includes('blurry vision') || lowerMessage.includes('blurred vision')) {
+            //         return 'Blurred vision: Rest eyes, Reduce screens, Lubricating drops. Persistent blurring needs ophthalmologist.';
+
+            //     } else if (lowerMessage.includes('eye strain') || lowerMessage.includes('tired eyes')) {
+            //         return 'Eye strain: Follow 20-20-20 rule (every 20 min look 20 ft for 20 sec), Cold compress, Artificial tears.';
+
+
+            //         // ======================================================
+            //         // 10. ENT (EAR, NOSE, THROAT) DISORDERS
+            //         // (ear pain, ear infection, ear wax, sinusitis, runny nose, blocked nose,
+            //         //  sore throat, tonsillitis, throat infection)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('ear pain') || lowerMessage.includes('ear ache') || lowerMessage.includes('otalgia')) {
+            //         return 'Ear pain: Paracetamol, Warm compress, Avoid inserting objects in ear.';
+
+            //     } else if (lowerMessage.includes('ear infection') || lowerMessage.includes('otitis')) {
+            //         return 'Ear infection: Warm compress, Paracetamol, See doctor for ear drops/antibiotics.';
+
+            //     } else if (lowerMessage.includes('ear wax') || lowerMessage.includes('blocked ear')) {
+            //         return 'Ear wax blockage: Wax-softening drops (OTC), Warm compress and gentle outer ear cleaning. Do not insert cotton buds deep.';
+
+            //     } else if (lowerMessage.includes('runny nose') || lowerMessage.includes('running nose')) {
+            //         return 'Runny nose: Antihistamines (Cetirizine), Steam inhalation, Saline nasal wash.';
+
+            //     } else if (lowerMessage.includes('blocked nose') || lowerMessage.includes('nose block') || lowerMessage.includes('stuffy nose')) {
+            //         return 'Nose block: Steam inhalation, Saline nasal spray, Warm fluids.';
+
+            //     } else if (lowerMessage.includes('sore throat') || lowerMessage.includes('throat pain')) {
+            //         return 'Sore throat: Warm salt gargle, Lozenges, Paracetamol.';
+
+            //     } else if (lowerMessage.includes('tonsillitis') || lowerMessage.includes('tonsils')) {
+            //         return 'Tonsillitis: Salt-water gargles, Paracetamol, See doctor if high fever or breathing difficulty.';
+
+            //     } else if (lowerMessage.includes('throat infection')) {
+            //         return 'Throat infection: Warm water, Gargles, Paracetamol. Antibiotics need doctor evaluation.';
+
+
+            //         // ======================================================
+            //         // 11. MENTAL HEALTH CONDITIONS
+            //         // (anxiety, depression, stress, insomnia, panic attack, ptsd)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('anxiety') || lowerMessage.includes('panic') || lowerMessage.includes('anxious')) {
+            //         return 'Anxiety: Deep breathing exercises, Meditation, Chamomile/green tea. Psychiatric meds require psychiatrist.';
+
+            //     } else if (lowerMessage.includes('depression') || lowerMessage.includes('depressed') || lowerMessage.includes('sadness')) {
+            //         return 'Depression: Talk to someone, Regular exercise, Journaling. Antidepressants require psychiatrist prescription.';
+
+            //     } else if (lowerMessage.includes('stress') || lowerMessage.includes('stressed')) {
+            //         return 'Stress: Short breaks, Deep breathing, Calming music and rest.';
+
+            //     } else if (lowerMessage.includes('insomnia') || lowerMessage.includes('can\'t sleep') || lowerMessage.includes('sleep problem')) {
+            //         return 'Insomnia: Reduce screen time before bed, Warm milk, Relaxation. Sleeping pills require doctor.';
+
+            //     } else if (lowerMessage.includes('panic attack')) {
+            //         return 'Panic attack: Sit calmly, slow deep breaths, sip water. Seek mental health professional for recurring attacks.';
+
+            //     } else if (lowerMessage.includes('ptsd') || lowerMessage.includes('trauma') || lowerMessage.includes('flashback')) {
+            //         return 'PTSD/Trauma: Talk therapy, Mindfulness, Professional psychiatric care recommended.';
+
+
+            //         // ======================================================
+            //         // 12. REPRODUCTIVE & URINARY SYSTEM DISORDERS
+            //         // (uti, kidney stones, menstrual pain, irregular periods, pcos,
+            //         //  vaginal infection, male reproductive infections, infertility)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('uti') || lowerMessage.includes('urinary infection') || lowerMessage.includes('burning urine')) {
+            //         return 'UTI: Plenty of water, Cranberry juice, Urinary alkalizer. Antibiotics need doctor.';
+
+            //     } else if (lowerMessage.includes('kidney stone') || lowerMessage.includes('stones in kidney') || lowerMessage.includes('renal stone')) {
+            //         return 'Kidney stones: Drink lots of water, Lemon water, Paracetamol for pain. Larger stones require urology care.';
+
+            //     } else if (lowerMessage.includes('period pain') || lowerMessage.includes('menstrual pain') || lowerMessage.includes('cramps')) {
+            //         return 'Period cramps: Ibuprofen, Hot water bag, Gentle exercise and rest.';
+
+            //     } else if (lowerMessage.includes('irregular period') || lowerMessage.includes('period problem')) {
+            //         return 'Irregular periods: Balanced diet, Exercise, Stress reduction. Hormonal meds require doctor evaluation.';
+
+            //     } else if (lowerMessage.includes('pcos') || lowerMessage.includes('polycystic ovary')) {
+            //         return 'PCOS: Weight management, Regular exercise, Healthy diet. Hormonal treatment requires doctor.';
+
+            //     } else if (lowerMessage.includes('vaginal infection') || lowerMessage.includes('white discharge') || lowerMessage.includes('itching vagina')) {
+            //         return 'Vaginal infection: Maintain hygiene, Keep area dry, Avoid scented products. Antifungal/antibiotic meds need doctor.';
+
+            //     } else if (lowerMessage.includes('testicle pain') || lowerMessage.includes('testicular pain') || lowerMessage.includes('male infection')) {
+            //         return 'Male reproductive infection: Warm compress, Comfortable clothing, Hydration. See doctor for antibiotics if infection suspected.';
+
+            //     } else if (lowerMessage.includes('infertility') || lowerMessage.includes('unable to conceive')) {
+            //         return 'Infertility: Healthy lifestyle, Stress management, Specialist fertility evaluation recommended.';
+
+
+            //         // ======================================================
+            //         // 13. BLOOD DISORDERS
+            //         // (anemia, thrombocytopenia, leukemia, hemophilia, b12 deficiency)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('anemia') || lowerMessage.includes('low hemoglobin') || lowerMessage.includes('low hb')) {
+            //         return 'Anemia: Iron-rich foods (spinach, beetroot), Folic acid, Multivitamin. Iron therapy requires doctor advice.';
+
+            //     } else if (lowerMessage.includes('platelets') || lowerMessage.includes('thrombocytopenia') || lowerMessage.includes('low platelets')) {
+            //         return 'Low platelets: Hydration, Rest, Natural supports (papaya leaf as anecdotal). Medical supervision required for severe cases.';
+
+            //     } else if (lowerMessage.includes('leukemia') || lowerMessage.includes('blood cancer') || lowerMessage.includes('lymphoma')) {
+            //         return 'Leukemia/Lymphoma: Supportive care - hydration and nutrition. Specialist oncology care and prescription treatments required.';
+
+            //     } else if (lowerMessage.includes('hemophilia') || lowerMessage.includes('bleeding disorder')) {
+            //         return 'Hemophilia: Avoid injuries, Apply pressure to bleeds, Seek specialist care. Do NOT take blood thinners.';
+
+            //     } else if (lowerMessage.includes('b12 deficiency') || lowerMessage.includes('b12 anemia') || lowerMessage.includes('vitamin b12')) {
+            //         return 'B12 deficiency: Vitamin B12-rich foods (eggs, dairy), Multivitamin. B12 injections require doctor prescription.';
+
+
+            //         // ======================================================
+            //         // 14. CANCERS (MAJOR TYPES) — Supportive care + strong warning
+            //         // (lung, breast, prostate, blood cancers, liver, skin)
+            //         // ======================================================
+
+            //     } else if (lowerMessage.includes('lung cancer')) {
+            //         return 'Lung cancer: Supportive care — breathing exercises, nutrition, hydration. Oncology treatment (chemo/targeted/immunotherapy) requires specialist and prescription.';
+
+            //     } else if (lowerMessage.includes('breast cancer')) {
+            //         return 'Breast cancer: Nutrition and emotional support. Oncologist-prescribed treatments (surgery/hormone/chemo) are required.';
+
+            //     } else if (lowerMessage.includes('prostate cancer')) {
+            //         return 'Prostate cancer: Supportive care and specialist evaluation. Hormone/radiation/chemo treatments need doctor supervision.';
+
+            //     } else if (lowerMessage.includes('blood cancer') || lowerMessage.includes('leukemia') || lowerMessage.includes('lymphoma')) {
+            //         return 'Blood cancer: Supportive care only. Specialist oncology care required — no OTC medicine treats blood cancer.';
+
+            //     } else if (lowerMessage.includes('liver cancer')) {
+            //         return 'Liver cancer: Avoid alcohol, balanced diet, specialist oncologist care needed for treatment.';
+
+            //     } else if (lowerMessage.includes('skin cancer')) {
+            //         return 'Skin cancer: Sun protection and dermatology/oncology assessment. Medical/surgical treatment required.';
+
+
+            //         // ======================================================
+            //         // DEFAULT RESPONSE
+            //         // ======================================================
+
+            //     } else {
+            //         return 'I understand your concern. Please describe your symptoms clearly (what, since when, any fever/breathing issues). NOTE: Never take prescription medicines without doctor advice.';
+            //     }
+            // }
+
+            loadChatHistory() {
+                const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+                const chatMessages = document.getElementById('chatMessages');
+
+                // Clear existing messages except welcome message
+                const welcomeMessage = chatMessages.querySelector('.message');
+                chatMessages.innerHTML = '';
+                chatMessages.appendChild(welcomeMessage);
+
+                history.forEach(chat => {
+                    this.addMessageToChat(chat.message, 'user');
+                    this.addMessageToChat(chat.response, 'bot');
+                });
+            }
+
+            async loadMedicalRecords() {
+                const records = [
+                    {
+                        date: '2024-01-15',
+                        title: 'General Checkup',
+                        doctor: 'Dr. Smith',
+                        description: 'Annual health examination completed. All vitals normal. Blood pressure: 120/80, Weight: 70kg, Heart rate: 72 bpm.',
+                        diagnosis: 'Good overall health',
+                        treatment: 'Continue regular exercise and balanced diet'
+                    },
+                    {
+                        date: '2024-01-10',
+                        title: 'Fever Consultation',
+                        doctor: 'Dr. Johnson',
+                        description: 'Patient presented with fever and headache. Temperature: 101°F.',
+                        diagnosis: 'Viral fever',
+                        treatment: 'Prescribed paracetamol 500mg, rest, and hydration'
+                    }
+                ];
+
+                const container = document.getElementById('medicalHistory');
+                container.innerHTML = records.map(record => `
+                    <div class="record-item">
+                        <div class="record-header">
+                            <h4 class="record-title">${record.title}</h4>
+                            <span class="record-date">${record.date}</span>
+                        </div>
+                        <div class="record-content">${record.description}</div>
+                        <div class="record-meta">
+                            <span><strong>Doctor:</strong> ${record.doctor}</span>
+                            <span><strong>Diagnosis:</strong> ${record.diagnosis}</span>
+                        </div>
+                        <div style="margin-top: 0.5rem;">
+                            <strong>Treatment:</strong> ${record.treatment}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            async loadPrescriptions() {
+                const prescriptions = [
+                    {
+                        medication: 'Paracetamol',
+                        dosage: '500mg',
+                        frequency: 'Twice daily',
+                        duration: '5 days',
+                        doctor: 'Dr. Johnson',
+                        date: '2024-01-10',
+                        status: 'completed'
+                    },
+                    {
+                        medication: 'Vitamin D3',
+                        dosage: '1000 IU',
+                        frequency: 'Once daily',
+                        duration: '30 days',
+                        doctor: 'Dr. Smith',
+                        date: '2024-01-15',
+                        status: 'active'
+                    }
+                ];
+
+                const container = document.getElementById('prescriptionsList');
+                container.innerHTML = prescriptions.map(prescription => `
+                    <div class="record-item">
+                        <div class="record-header">
+                            <h4 class="record-title">${prescription.medication} - ${prescription.dosage}</h4>
+                            <span class="record-date" style="color: ${prescription.status === 'active' ? '#48bb78' : '#64748b'};">
+                                ${prescription.status}
+                            </span>
+                        </div>
+                        <div class="record-content">
+                            <strong>Frequency:</strong> ${prescription.frequency}<br>
+                            <strong>Duration:</strong> ${prescription.duration}
+                        </div>
+                        <div class="record-meta">
+                            <span><strong>Prescribed by:</strong> ${prescription.doctor}</span>
+                            <span><strong>Date:</strong> ${prescription.date}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            async loadDocuments() {
+                const documents = [
+                    {
+                        name: 'Blood_Test_Report.pdf',
+                        date: '2024-01-15',
+                        size: '2.3 MB',
+                        type: 'Lab Report'
+                    },
+                    {
+                        name: 'X-Ray_Chest.jpg',
+                        date: '2024-01-10',
+                        size: '1.8 MB',
+                        type: 'X-Ray'
+                    }
+                ];
+
+                const container = document.getElementById('uploadedFiles');
+                container.innerHTML = documents.map(doc => `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">
+                                <i class="fas fa-${doc.name.endsWith('.pdf') ? 'file-pdf' : 'file-image'}"></i>
+                            </div>
+                            <div class="file-details">
+                                <h4>${doc.name}</h4>
+                                <p>${doc.type} • ${doc.size} • ${doc.date}</p>
+                            </div>
+                        </div>
+                        <div class="file-actions">
+                            <button class="btn btn-outline btn-sm" onclick="viewDocument('${doc.name}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="downloadDocument('${doc.name}')">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            async loadAppointments() {
+                const appointments = [
+                    {
+                        date: '2024-09-10',
+                        time: '10:00 AM',
+                        doctor: 'Dr. Smith',
+                        type: 'Follow-up',
+                        status: 'scheduled'
+                    },
+                    {
+                        date: '2024-09-15',
+                        time: '2:00 PM',
+                        doctor: 'Dr. Johnson',
+                        type: 'Consultation',
+                        status: 'scheduled'
+                    }
+                ];
+
+                const container = document.getElementById('appointmentsList');
+                container.innerHTML = appointments.map(appointment => `
+                    <div class="record-item">
+                        <div class="record-header">
+                            <h4 class="record-title">${appointment.type} with ${appointment.doctor}</h4>
+                            <span class="record-date">${appointment.status}</span>
+                        </div>
+                        <div class="record-content">
+                            <strong>Date:</strong> ${appointment.date}<br>
+                            <strong>Time:</strong> ${appointment.time}
+                        </div>
+                        ${appointment.status === 'scheduled' ? `
+                            <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                                <button class="btn btn-primary btn-sm">
+                                    <i class="fas fa-video"></i> Join Virtual
+                                </button>
+                                <button class="btn btn-outline btn-sm">
+                                    <i class="fas fa-calendar-alt"></i> Reschedule
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            }
+
+            handleFiles(files) {
+                Array.from(files).forEach(file => {
+                    if (file.size > 10 * 1024 * 1024) {
+                        this.showNotification('File size must be less than 10MB', 'error');
+                        return;
+                    }
+                    this.uploadFile(file);
+                });
+            }
+
+            async uploadFile(file) {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <div class="file-details">
+                            <h4>${file.name}</h4>
+                            <p>Uploading... 0%</p>
+                        </div>
+                    </div>
+                    <div class="upload-progress" style="width: 100px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                        <div style="height: 100%; background: linear-gradient(135deg, #667eea, #764ba2); width: 0%; transition: width 0.3s ease;"></div>
+                    </div>
+                `;
+
+                document.getElementById('uploadedFiles').appendChild(fileItem);
+
+                // Simulate upload progress
+                let progress = 0;
+                const progressBar = fileItem.querySelector('.upload-progress div');
+                const progressText = fileItem.querySelector('.file-details p');
+
+                const interval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 100) progress = 100;
+
+                    progressBar.style.width = progress + '%';
+                    progressText.textContent = `Uploading... ${Math.round(progress)}%`;
+
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        progressText.textContent = `${this.formatFileSize(file.size)} • Just now`;
+                        fileItem.innerHTML = `
+                            <div class="file-info">
+                                <div class="file-icon">
+                                    <i class="fas fa-${file.type.includes('image') ? 'file-image' : 'file-alt'}"></i>
+                                </div>
+                                <div class="file-details">
+                                    <h4>${file.name}</h4>
+                                    <p>${this.formatFileSize(file.size)} • Just now</p>
+                                </div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="btn btn-outline btn-sm">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="btn btn-outline btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        `;
+                        this.showNotification('File uploaded successfully', 'success');
+                    }
+                }, 200);
+            }
+
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+
+                document.body.appendChild(notification);
+                setTimeout(() => notification.classList.add('show'), 100);
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 4000);
+            }
+        }
+
+        // Global functions
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+
+        function sendMessage() {
+            dashboard.sendMessage();
+        }
+
+        function clearChat() {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+                localStorage.removeItem('chatHistory');
+                document.getElementById('chatMessages').innerHTML = `
+                    <div class="message">
+                        <div class="message-avatar bot-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm your AI health assistant. How can I help you today?</p>
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+                `;
+                dashboard.showNotification('Chat history cleared', 'success');
+            }
+        }
+
+        function exportChatHistory() {
+            const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+            if (history.length === 0) {
+                dashboard.showNotification('No chat history to export', 'info');
+                return;
+            }
+
+            const exportData = {
+                patient: dashboard.currentUser?.name,
+                exportDate: new Date().toISOString(),
+                chatHistory: history
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `chat-history-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+
+            URL.revokeObjectURL(url);
+            dashboard.showNotification('Chat history exported successfully', 'success');
+        }
+
+        function updateProfile() {
+            const formData = {
+                name: document.getElementById('profileName').value,
+                email: document.getElementById('profileEmail').value,
+                phone: document.getElementById('profilePhone').value,
+                dateOfBirth: document.getElementById('profileDOB').value,
+                gender: document.getElementById('profileGender').value,
+                bloodGroup: document.getElementById('profileBloodGroup').value,
+                emergencyContact: document.getElementById('emergencyContact').value,
+                medicalConditions: document.getElementById('medicalConditions').value
+            };
+
+            // Update localStorage
+            Object.keys(formData).forEach(key => {
+                if (formData[key]) {
+                    localStorage.setItem(`patient${key.charAt(0).toUpperCase() + key.slice(1)}`, formData[key]);
+                }
+            });
+
+            dashboard.currentUser = { ...dashboard.currentUser, ...formData };
+            localStorage.setItem('userData', JSON.stringify(dashboard.currentUser));
+
+            dashboard.showNotification('Profile updated successfully!', 'success');
+        }
+
+        function generateHealthReport() {
+            dashboard.showNotification('Generating health report...', 'info');
+            // Implementation for health report generation
+        }
+
+        function showAddMetricModal() {
+            dashboard.showNotification('Add health metric feature coming soon', 'info');
+        }
+
+        function requestPrescription() {
+            dashboard.showNotification('Prescription request feature coming soon', 'info');
+        }
+
+        function viewAllDocuments() {
+            dashboard.showNotification('View all documents feature coming soon', 'info');
+        }
+
+        function uploadBulkDocuments() {
+            dashboard.showNotification('Bulk upload feature coming soon', 'info');
+        }
+
+        function bookAppointment() {
+            dashboard.showNotification('Book appointment feature coming soon', 'info');
+        }
+
+        function viewDocument(fileName) {
+            dashboard.showNotification(`Viewing ${fileName}`, 'info');
+        }
+
+        function downloadDocument(fileName) {
+            dashboard.showNotification(`Downloading ${fileName}`, 'info');
+        }
+
+        // Initialize dashboard
+        const dashboard = new PatientDashboard();
+    </script>
+</body>
+
+</html>
